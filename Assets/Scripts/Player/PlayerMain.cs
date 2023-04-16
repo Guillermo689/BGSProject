@@ -72,7 +72,7 @@ public class PlayerMain : MonoBehaviour
     }
     IEnumerator Quit()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
         Application.Quit();
     }
 }
