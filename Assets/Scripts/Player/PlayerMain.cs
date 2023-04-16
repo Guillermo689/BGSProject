@@ -60,13 +60,19 @@ public class PlayerMain : MonoBehaviour
 
     public void ResumeGame()
     {
-        Time.timeScale = 0;
+        Time.timeScale = 1;
         _pauseMenu.SetActive(false);
         isPaused = false;
     }
 
     public void QuitGame()
     {
+        _playerInventory.ClearInventory();
+        StartCoroutine(Quit());
+    }
+    IEnumerator Quit()
+    {
+        yield return new WaitForSeconds(0.5f);
         Application.Quit();
     }
 }

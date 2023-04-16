@@ -182,9 +182,10 @@ public class PlayerInventory : MonoBehaviour
     {
         _inventory.Money += 10;
     }
-    private void OnApplicationQuit()
+    public void ClearInventory()
     {
         _inventory.Items.Clear();
+        _inventory.Money = 0;
     }
 
     public void EquipPop()
