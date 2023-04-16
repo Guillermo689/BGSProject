@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -8,10 +9,13 @@ public class PlayerInventory : MonoBehaviour
     [Header("Item Variables")]
     [SerializeField] private GameObject _inventoryWindow;
     [SerializeField] internal ItemObject _equippedItem;
+    [SerializeField] private TMP_Text _money;
+    [SerializeField] private AudioClip _equipPop;
     [Header("Shop Variables")]
     [SerializeField] private GameObject _shopWindow;
     [SerializeField] internal GameObject _shopPanel;
     [SerializeField] internal InventoryObject _shopInventory;
+    [SerializeField] private GameObject _unequipButton;
     public bool IsShop;
 
     void Start()
@@ -25,8 +29,14 @@ public class PlayerInventory : MonoBehaviour
     void Update()
     {
         if (_playerMain._inventoryButton.WasPressedThisFrame()) ToggleInventory(false);
+        if (_playerMain._addMoney.WasPressedThisFrame()) AddMoney();
+        MoneyText();
     }
 
+    private void MoneyText()
+    {
+        _money.text = "$ " + _inventory.Money.ToString();
+    }
     public void AddItem(ItemObject item)
     {
         _inventory.Items.Add(item);
@@ -35,6 +45,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (_equippedItem != null) UnequipItem();
         _equippedItem = item;
+        EquipPop();
         _playerMain._playerOutfit.UpdateOutfit();
     }
     public void UnequipItem()       //Unequip the item and set the outfit to 0
@@ -48,15 +59,30 @@ public class PlayerInventory : MonoBehaviour
     }
 
     #region Invnetory Window
-    public void ToggleInventory(bool isShop)        //Check if inventory is closed and open it, and vice versa, and check if is shopping, so it activate the shopping functions instead
+    public void ToggleInventory(bool isShopPanel)        //Check if inventory is closed and open it, and vice versa, and check if is shopping, so it activate the shopping functions instead
     {
         if(_inventoryWindow.activeSelf) _inventoryWindow.SetActive(false);
         else
         {
             _inventoryWindow.SetActive(true);
-            UpdateInventoryPanel(_inventory, _panel, isShop);
+            UpdateInventoryPanel(_inventory, _panel, isShopPanel);
+            if (IsShop) _unequipButton.SetActive(false);
+            else _unequipButton.SetActive(true);
             DestroyIcon(_inventory, _panel);
         }
+    }
+
+    public void OpenInventory()
+    {
+        _inventoryWindow.SetActive(true);
+        UpdateInventoryPanel(_inventory, _panel, false);
+        if (IsShop) _unequipButton.SetActive(false);
+        else _unequipButton.SetActive(true);
+        DestroyIcon(_inventory, _panel);
+    }
+    public void CloseInventory()
+    {
+        _inventoryWindow.SetActive(false);
     }
     private void DestroyIcon(InventoryObject inventory, GameObject panel)        //Check all items in the inventory window, if doesn't contain item, create the button
     {
@@ -121,10 +147,19 @@ public class PlayerInventory : MonoBehaviour
 
     public void ToggleShop(bool open)       //Open and close the shop window
     {
-        if (!open) _shopWindow.SetActive(false);
+        if (!open)
+        {
+            for (int i = 0; i < _shopPanel.transform.childCount; i++)
+            {
+                Destroy(_shopPanel.transform.GetChild(i).gameObject);
+            }
+            _shopWindow.SetActive(false);
+        }
         else
         {
+
             _shopWindow.SetActive(true);
+            UpdateInventoryPanel(_inventory, _panel, false);
             UpdateInventoryPanel(_shopInventory, _shopPanel, true);
         }
        
@@ -142,4 +177,18 @@ public class PlayerInventory : MonoBehaviour
     }
 
     #endregion
+
+    private void AddMoney()
+    {
+        _inventory.Money += 10;
+    }
+    private void OnApplicationQuit()
+    {
+        _inventory.Items.Clear();
+    }
+
+    public void EquipPop()
+    {
+        _playerMain.PlayerAudio.PlayOneShot(_equipPop);
+    }
 }

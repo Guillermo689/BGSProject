@@ -57,13 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\PlayerMain.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerOutfit.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInventory.cs" />
-    <Compile Include="Assets\Scripts\Player\InventoryObject.cs" />
     <Compile Include="Assets\Scripts\Player\ItemObject.cs" />
-    <Compile Include="Assets\Scripts\Player\EquipButton.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCShop.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerOutfit.cs" />
+    <Compile Include="Assets\Scripts\Player\EquipButton.cs" />
+    <Compile Include="Assets\Scripts\Player\InventoryObject.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Environment\InteriorActivator.cs" />
+    <Compile Include="Assets\Scripts\Player\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\MainMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

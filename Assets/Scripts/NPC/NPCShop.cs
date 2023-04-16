@@ -1,6 +1,4 @@
-using TMPro.EditorUtilities;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class NPCShop : MonoBehaviour
 {
@@ -8,9 +6,20 @@ public class NPCShop : MonoBehaviour
     private GameObject _selectedPlayer;
     [SerializeField] private GameObject _talkIcon;
 
+    [SerializeField] private InventoryObject _itemLibrary;
+
     private void Start()
     {
         _talkIcon.SetActive(false);
+        FillInventory();
+    }
+
+    private void FillInventory()
+    {
+        for (int i = 0; i < _itemLibrary.Items.Count; i++)
+        {
+            if(!_inventory.Items.Contains(_itemLibrary.Items[i])) _inventory.Items.Add(_itemLibrary.Items[i]);
+        }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -47,9 +56,13 @@ public class NPCShop : MonoBehaviour
         playerMain._playerInventory._shopInventory = _inventory;
         playerMain._playerInventory.IsShop = open;
         playerMain._playerInventory.ToggleShop(open);
-        playerMain._playerInventory.ToggleInventory(false);
+        if(open) playerMain._playerInventory.OpenInventory();
+        else playerMain._playerInventory.CloseInventory();
+    }
+    private void OnApplicationQuit()
+    {
+        _inventory.Items.Clear();
     }
 
-  
 
 }

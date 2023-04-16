@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c03ee76c70572ff4db9bd9eef8fb9eeb, type: 3}
+  m_Name: 5-Cyberpunk2
+  m_EditorClassIdentifier: 
+  Name: Pink Haired Clothes
+  OutfitIndex: 5
+  Price: 22
+  Icon: {fileID: -1300240831, guid: 459f058f1ef52dc4c8a7b2c0f10d7f8b, type: 3}
+  Prefab: {fileID: 5165948385023105441, guid: 91de92cbbe282bc48b1554edef0cd9fa, type: 3}

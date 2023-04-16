@@ -1,20 +1,40 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipButton : MonoBehaviour
+public class EquipButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private PlayerMain _playerMain;
     public ItemObject Item;
     private Image _image;
     public bool IsShopPanel;
+    [SerializeField] private TMP_Text _tooltip;
+    [SerializeField] private AudioClip _buyPop;
+    [SerializeField] private AudioClip _buyNo;
+
     // Start is called before the first frame update
     void Start()
     {
         _playerMain = GetComponentInParent<PlayerMain>();
         _image = GetComponentInParent<Image>();
         _image.sprite = Item.Icon;
+        FillItemText();
+        HideTooltip();
     }
 
+    private void FillItemText()
+    {
+        if (IsShopPanel)
+        {
+            _tooltip.text = Item.Name + "/ Price: " + Item.Price.ToString() + " $";
+        }
+        else
+        {
+            _tooltip.text = Item.Name;
+        }
+      
+    }
     public void ItemButton()        //This will decide if either buy, sell or equip, and is called directly by the button icon
     {
         if (_playerMain._playerInventory.IsShop)
@@ -38,6 +58,7 @@ public class EquipButton : MonoBehaviour
         {
             if (!_playerMain._playerInventory.ContainsItem(Item, _playerMain._playerInventory._inventory))
             {
+                _playerMain.PlayerAudio.PlayOneShot(_buyPop);
                 _playerMain._playerInventory.AddItem(Item);
                 _playerMain._playerInventory._inventory.Money -= Item.Price;
                 _playerMain._playerInventory.RemoveShopItem(Item);
@@ -47,12 +68,12 @@ public class EquipButton : MonoBehaviour
             }
             else
             {
-                Debug.Log("Already contains item");
+                _playerMain.PlayerAudio.PlayOneShot(_buyNo);
             }
         }
         else
         {
-            Debug.Log("Can't buy ");
+           _playerMain.PlayerAudio.PlayOneShot(_buyNo);
         }
         
     }
@@ -68,4 +89,22 @@ public class EquipButton : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void ShowTooltip()
+    {
+        _tooltip.transform.parent.gameObject.SetActive(true);
+    }
+    private void HideTooltip()
+    {
+        _tooltip.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ShowTooltip();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        HideTooltip();
+    }
 }
